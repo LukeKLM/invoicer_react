@@ -1,6 +1,8 @@
 "use client";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Cookies from 'js-cookie';
+import { redirect } from 'next/navigation'
 
 export const Navigation = () =>{
     const pathname = usePathname();
@@ -8,6 +10,12 @@ export const Navigation = () =>{
     function isActive(path: string, startsWith: boolean = false) {
 
         return pathname === path || (startsWith && pathname.startsWith(path)) ? 'text-blue-500' : '';
+    }
+
+    const logout = () => {
+        console.log("logout")
+        Cookies.remove("access_token");
+        redirect("/login")
     }
 
   return (
@@ -24,6 +32,11 @@ export const Navigation = () =>{
       <Link href="/dashboard/invoices/testing_invoice" className={`${isActive("/dashboard/invoices", true)}`}>
         Invoice
       </Link>
+      <span
+        onClick={logout}
+        >
+          Odhlásit
+      </span>
     </nav>
   );
 }
