@@ -1,15 +1,11 @@
 "use client";
-import { useRouter } from 'next/navigation';
-
-export const Button = () => {
-    const router = useRouter();
-
+export default function Button({ children, onClick }: { children: React.ReactNode, onClick: () => Promise<void> | void }) {
     return (
-        <button
-            onClick={() => router.push('/')}
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-        >
-            Home
-        </button>
+      <button 
+        className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded"
+        onClick={onClick}
+      >
+        {children}
+      </button>
     );
-}
+  }

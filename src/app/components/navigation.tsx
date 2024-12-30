@@ -13,29 +13,38 @@ export const Navigation = () =>{
     }
 
     const logout = () => {
-        console.log("logout")
         Cookies.remove("access_token");
         redirect("/login")
     }
 
   return (
     <nav className={`${"flex items-center justify-between p-4 bg-slate-400 text-white "}`}>
-      <Link href="/" className={`${isActive("/")}`}>
+      <Link href="/" className={`${isActive("/")} hover:text-blue-500`}>
         Home
       </Link>
-      <Link href="/register" className={`${isActive("/register")}`}>
+      <Link href="/register" className={`${isActive("/register")} hover:text-blue-500`}>
         Register
       </Link>
-      <Link href="/login" className={`${isActive("/login")}`}>
+      <Link href="/login" className={`${isActive("/login")} hover:text-blue-500`}>
         Login
       </Link>
-      <Link href="/dashboard/invoices/testing_invoice" className={`${isActive("/dashboard/invoices", true)}`}>
-        Invoice
+      <Link href="/invoices" className={`${isActive("/invoices", true)} hover:text-blue-500`}>
+        Invoices
+      </Link>
+      <Link href="/invoice-items" className={`${isActive("/invoices-items", true)} hover:text-blue-500`}>
+        Invoices Items
+      </Link>
+      <Link href="/customers" className={`${isActive("/customers", true)} hover:text-blue-500`}>
+        Customers
+      </Link>
+      <Link href="/suppliers" className={`${isActive("/suppliers", true)} hover:text-blue-500`}>
+        Suppliers
       </Link>
       <span
+      className='cursor-pointer hover:text-blue-500'
         onClick={logout}
         >
-          Odhlásit
+          Log out
       </span>
     </nav>
   );

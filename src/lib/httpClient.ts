@@ -1,28 +1,35 @@
-export const post = async (url: string, data: any) => {
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
-        return await response.json();
-    } catch (error) {
-        console.error(error);
+import Cookies from "js-cookie"
+
+const get_headers = () => {
+    const headers: {[key: string]: string} = {
+        'Content-Type': 'application/json',
     }
+
+    const token = Cookies.get("access_token")
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`
+    }
+
+    return headers
 }
 
-export const get = async (url: string) => {
-    try {
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        return await response.json();
-    } catch (error) {
-        console.error(error);
+const fetchClient = async(
+    url: string,
+    options: RequestInit={}
+) => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${url}`, {
+        ...options,
+        headers: {
+            ...get_headers(),
+            ...options.headers,
+        }
+    });
+
+    if (!res.ok) {
+        throw new Error(`Fetch error (status: ${res.status})`);
     }
+
+    return res;
 }
+
+export default fetchClient

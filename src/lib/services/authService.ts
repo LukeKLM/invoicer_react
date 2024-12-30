@@ -1,13 +1,18 @@
-import { post } from "@/lib/httpClient"
 import Cookies from "js-cookie";
+import fetchClient from "@/lib/httpClient";
 
 export const login = async (email: string, password: string) => {
-    const result =  await post("http://127.0.0.1:8000/auth/token", { email, password })
-
-    Cookies.set("access_token", result.access_token, {
+    const result = await fetchClient(
+        "/auth/token",
+        {
+            method: "POST",
+            body: JSON.stringify({ email, password }),
+        }
+    )
+    const json_data = await result.json()
+    Cookies.set("access_token", json_data.access_token, {
         httpOnly: false, // Set to true only on server-side cookies
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
     });
-    console.log(result)
 }
