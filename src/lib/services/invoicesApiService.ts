@@ -50,5 +50,12 @@ export const downloadInvoice = async (id: number) => {
             method: "GET",
         }
     )
-    return response.blob()
+    const pdfBlob = await response.blob()
+    const url = URL.createObjectURL(pdfBlob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `invoice_${id}.pdf`;
+    link.click();
+    URL.revokeObjectURL(url);
 }

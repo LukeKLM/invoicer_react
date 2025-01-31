@@ -5,4 +5,4 @@ export default async function Invoice({ params }: { params: { id: string } }) {
     return (<div>
         <h1>Invoice {id}</h1>
     </div>);
-} 
+}

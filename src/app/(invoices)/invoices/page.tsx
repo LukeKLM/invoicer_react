@@ -1,18 +1,32 @@
 "use client";
 
 import { InvoiceForm } from "@/app/components/forms/InvoiceForm";
-import { getInvoices, deleteInvoice, downloadInvoice } from "@/lib/services/invoicesApiService"
-import { useState, useEffect } from 'react';
-import Button from "@/app/components/Button";
+import {
+    getInvoices,
+    deleteInvoice,
+    downloadInvoice,
+} from "@/lib/services/invoicesApiService";
+import { useState, useEffect } from "react";
 import { Invoice } from "@/types/invoice";
-
+import { Button } from "@/components/ui/button";
+import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 
 export default function InvoicesDashboard() {
     const [invoices, setInvoices] = useState<Invoice[]>([]);
     const [draftInvoice, setDraftInvoice] = useState<Invoice | null>(null);
 
     async function fetchData() {
-        const invoices = await getInvoices()  /* todo: move path to api service with base path from env */
+        const invoices =
+            await getInvoices(); /* todo: move path to api service with base path from env */
         setInvoices(invoices);
     }
 
@@ -20,84 +34,75 @@ export default function InvoicesDashboard() {
         fetchData();
     }, []);
 
-
     const handleDeleteInvoice = async (invoice_id: number | null) => {
-        if (!invoice_id) return
+        if (!invoice_id) return;
 
-        await deleteInvoice(invoice_id)
-        await fetchData()
-    }
+        await deleteInvoice(invoice_id);
+        await fetchData();
+    };
 
     const handleEditInvoice = (invoice: Invoice) => {
-        setDraftInvoice({...invoice})
-    }
+        setDraftInvoice({ ...invoice });
+    };
 
     const handleCopyInvoice = (invoice: Invoice) => {
-        setDraftInvoice({...invoice, id: null})
-    }
+        setDraftInvoice({ ...invoice, id: null });
+    };
 
     const handleDownlaodInvoice = async (invoice_id: number | null) => {
-        if(!invoice_id) return
+        if (!invoice_id) return;
 
-        console.log("Downloading invoice with id: ", invoice_id)
-        const pdfBlob = await downloadInvoice(invoice_id);
-        console.log(pdfBlob)
-
-      // Create a temporary URL for the PDF
-      const url = URL.createObjectURL(pdfBlob);
-
-      // Create a hidden link and auto-click it to start download
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "document.pdf"; // Customize file name as needed
-      link.click();
-
-      // Clean up the temporary URL
-      URL.revokeObjectURL(url);
-    }
+        console.log("Downloading invoice with id: ", invoice_id);
+        await downloadInvoice(invoice_id);
+    };
 
     return (
-    <div className="text-black">
-        <h1>InvoicesDashboard</h1>
-        <table className="border-black border-2" border={1}>
-            <thead>
-                <tr>
-                    <th>Invoice ID</th>
-                    <th>Invoice Number</th>
-                    <th>Due Date</th>
-                    <th>Expose Date</th>
-                    <th>Payment Type</th>
-                    <th>State</th>
-                    <th>Variable Symbol</th>
-                    <th>actions</th>
-                </tr>
-            </thead>
-            <tbody className="border-black border-2">
-                {invoices.map((invoice) => (
-                    <tr key={invoice.id}>
-                        <td>{invoice.id}</td>
-                        <td>{invoice.invoice_number}</td>
-                        <td>{invoice.due_date}</td>
-                        <td>{invoice.expose_date}</td>
-                        <td>{invoice.payment_type}</td>
-                        <td>{invoice.state}</td>
-                        <td>{invoice.variable_symbol}</td>
-                        <td>
-                        <Button onClick={() => handleDeleteInvoice(invoice.id)}>Delete</Button>
-                        <Button onClick={() => handleEditInvoice(invoice)}>Edit</Button>
-                        <Button onClick={() => handleCopyInvoice(invoice)}>Copy</Button>
-                        <Button onClick={() => handleDownlaodInvoice(invoice.id)}>Download</Button>
-                        </td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
-        <InvoiceForm
-            afterSubmit={fetchData}
-            draftInvoice={draftInvoice}
-        />
-    </div>
-);
+        <div>
+            <Table>
+                <TableCaption>A list of your recent invoices.</TableCaption>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead className="w-[100px]">ID</TableHead>
+                        <TableHead>Number</TableHead>
+                        <TableHead>Due date</TableHead>
+                        <TableHead>Expose date</TableHead>
+                        <TableHead>Payment type</TableHead>
+                        <TableHead>State</TableHead>
+                        <TableHead>Variable symbol</TableHead>
+                        <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {invoices.map((invoice) => (
+                        <TableRow key={invoice.id}>
+                            <TableCell className="font-medium">{invoice.id}</TableCell>
+                            <TableCell>{invoice.invoice_number}</TableCell>
+                            <TableCell>{invoice.due_date}</TableCell>
+                            <TableCell>{invoice.expose_date}</TableCell>
+                            <TableCell>{invoice.payment_type}</TableCell>
+                            <TableCell>{invoice.state}</TableCell>
+                            <TableCell>{invoice.variable_symbol}</TableCell>
+                            <TableCell className="text-right">
+                                <Button onClick={() => handleDeleteInvoice(invoice.id)}>
+                                    Delete
+                                </Button>
+                                <Button onClick={() => handleEditInvoice(invoice)}>Edit</Button>
+                                <Button onClick={() => handleCopyInvoice(invoice)}>Copy</Button>
+                                <Button onClick={() => handleDownlaodInvoice(invoice.id)}>
+                                    Download
+                                </Button>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+                <TableFooter>
+                    <TableRow>
+                        <TableCell colSpan={3}>Total</TableCell>
+                        <TableCell className="text-right">{invoices.length}</TableCell>
+                    </TableRow>
+                </TableFooter>
+            </Table>
+            <InvoiceForm afterSubmit={fetchData} draftInvoice={draftInvoice} />
+        </div>
+    );
 }
-
-

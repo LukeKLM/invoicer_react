@@ -2,17 +2,27 @@
 
 import { deleteSupplier, getSuppliers } from "@/lib/services/suppliersApiService";
 import { useEffect, useState } from "react";
-import { Supplier} from "@/types/supplier";
+import { Supplier } from "@/types/supplier";
 import SupplierForm from "@/app/components/forms/SupplierForm";
-import Button from "@/app/components/Button";
+import { Button } from "@/components/ui/button";
+import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 
 const SupplierTable = () => {
-    const [Suppliers, setSuppliers] = useState<Supplier[]>([]);
+    const [suppliers, setSuppliers] = useState<Supplier[]>([]);
     const [draftSupplier, setDraftSupplier] = useState<Supplier | null>(null);
 
     const fetchData = async () => {
-        const Suppliers: Supplier[] = await getSuppliers()
-        setSuppliers(Suppliers)
+        const suppliers: Supplier[] = await getSuppliers()
+        setSuppliers(suppliers)
     }
     const handleDeleteSupplier = async (invoice_id: number | null) => {
         if (!invoice_id) return
@@ -22,11 +32,11 @@ const SupplierTable = () => {
     }
 
     const handleEditSupplier = (invoice: Supplier) => {
-        setDraftSupplier({...invoice})
+        setDraftSupplier({ ...invoice })
     }
 
     const handleCopySupplier = (invoice: Supplier) => {
-        setDraftSupplier({...invoice, id: null})
+        setDraftSupplier({ ...invoice, id: null })
     }
 
     useEffect(() => {
@@ -36,51 +46,58 @@ const SupplierTable = () => {
 
     return (
         <div>
-            <h1>Invoice Item Table</h1>
-            <table className="border-black border-2" border={1}>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>E-mail</th>
-                    <th>VAT</th>
-                    <th>City</th>
-                    <th>Country</th>
-                    <th>Street</th>
-                    <th>Postal code</th>
-                    <th>Bank Account</th>
-                    <th>Bank Code</th>
-                    <th>IBAN</th>
-                </tr>
-            </thead>
-            <tbody className="border-black border-2">
-                {Suppliers.map((supplier) => (
-                    <tr key={supplier.id}>
-                        <td>{supplier.id}</td>
-                        <td>{supplier.name}</td>
-                        <td>{supplier.email}</td>
-                        <td>{supplier.vat_id}</td>
-                        <td>{supplier.city}</td>
-                        <td>{supplier.country}</td>
-                        <td>{supplier.street}</td>
-                        <td>{supplier.postal_code}</td>
-                        <td>{supplier.bank_account}</td>
-                        <td>{supplier.bank_code}</td>
-                        <td>{supplier.iban}</td>
-                        <td>
-                        <Button onClick={() => handleDeleteSupplier(supplier.id)}>Delete</Button>
-                        <Button onClick={() => handleEditSupplier(supplier)}>Edit</Button>
-                        <Button onClick={() => handleCopySupplier(supplier)}>Copy</Button>
-                        </td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
+            <Table>
+                <TableCaption>A list of your recent invoices.</TableCaption>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead className="w-[100px]">ID</TableHead>
+                        <TableHead>Name</TableHead>
+                        <TableHead>E-mail</TableHead>
+                        <TableHead>Vat</TableHead>
+                        <TableHead>City</TableHead>
+                        <TableHead>Country</TableHead>
+                        <TableHead>Street</TableHead>
+                        <TableHead>Postal code</TableHead>
+                        <TableHead>Bank account</TableHead>
+                        <TableHead>Bank code</TableHead>
+                        <TableHead>IBAN</TableHead>
+                        <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {suppliers.map((supplier) => (
+                        <TableRow key={supplier.id}>
+                            <TableCell className="font-medium">{supplier.id}</TableCell>
+                            <TableCell>{supplier.name}</TableCell>
+                            <TableCell>{supplier.email}</TableCell>
+                            <TableCell>{supplier.vat_id}</TableCell>
+                            <TableCell>{supplier.city}</TableCell>
+                            <TableCell>{supplier.country}</TableCell>
+                            <TableCell>{supplier.street}</TableCell>
+                            <TableCell>{supplier.postal_code}</TableCell>
+                            <TableCell>{supplier.bank_account}</TableCell>
+                            <TableCell>{supplier.bank_code}</TableCell>
+                            <TableCell>{supplier.iban}</TableCell>
+                            <TableCell className="text-right">
+                                <Button onClick={() => handleDeleteSupplier(supplier.id)}>Delete</Button>
+                                <Button onClick={() => handleEditSupplier(supplier)}>Edit</Button>
+                                <Button onClick={() => handleCopySupplier(supplier)}>Copy</Button>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+                <TableFooter>
+                    <TableRow>
+                        <TableCell colSpan={3}>Total</TableCell>
+                        <TableCell className="text-right">{suppliers.length}</TableCell>
+                    </TableRow>
+                </TableFooter>
+            </Table>
 
-        <SupplierForm
-            draftSupplier={draftSupplier}
-            afterSubmit={fetchData}
-        />
+            <SupplierForm
+                draftSupplier={draftSupplier}
+                afterSubmit={fetchData}
+            />
         </div>
     )
 }

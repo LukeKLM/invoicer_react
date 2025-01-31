@@ -4,15 +4,25 @@ import { deleteCustomer, getCustomers } from "@/lib/services/customersApiService
 import { useEffect, useState } from "react";
 import { Customer } from "@/types/customer";
 import CustomerForm from "../forms/CustomerForm";
-import Button from "@/app/components/Button";
+import { Button } from "@/components/ui/button";
+import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 
 const CustomerTable = () => {
-    const [Customers, setCustomers] = useState<Customer[]>([]);
+    const [customers, setCustomers] = useState<Customer[]>([]);
     const [draftCustomer, setDraftCustomer] = useState<Customer | null>(null);
 
     const fetchData = async () => {
-        const Customers: Customer[] = await getCustomers()
-        setCustomers(Customers)
+        const customers: Customer[] = await getCustomers()
+        setCustomers(customers)
     }
     const handleDeleteCustomer = async (invoice_id: number | null) => {
         if (!invoice_id) return
@@ -22,11 +32,11 @@ const CustomerTable = () => {
     }
 
     const handleEditCustomer = (invoice: Customer) => {
-        setDraftCustomer({...invoice})
+        setDraftCustomer({ ...invoice })
     }
 
     const handleCopyCustomer = (invoice: Customer) => {
-        setDraftCustomer({...invoice, id: null})
+        setDraftCustomer({ ...invoice, id: null })
     }
 
     useEffect(() => {
@@ -36,45 +46,52 @@ const CustomerTable = () => {
 
     return (
         <div>
-            <h1>Invoice Item Table</h1>
-            <table className="border-black border-2" border={1}>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>E-mail</th>
-                    <th>VAT</th>
-                    <th>City</th>
-                    <th>Country</th>
-                    <th>Street</th>
-                    <th>Postal code</th>
-                </tr>
-            </thead>
-            <tbody className="border-black border-2">
-                {Customers.map((customer) => (
-                    <tr key={customer.id}>
-                        <td>{customer.id}</td>
-                        <td>{customer.name}</td>
-                        <td>{customer.email}</td>
-                        <td>{customer.vat_id}</td>
-                        <td>{customer.city}</td>
-                        <td>{customer.country}</td>
-                        <td>{customer.street}</td>
-                        <td>{customer.postal_code}</td>
-                        <td>
-                        <Button onClick={() => handleDeleteCustomer(customer.id)}>Delete</Button>
-                        <Button onClick={() => handleEditCustomer(customer)}>Edit</Button>
-                        <Button onClick={() => handleCopyCustomer(customer)}>Copy</Button>
-                        </td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
+            <Table>
+                <TableCaption>A list of your recent invoices.</TableCaption>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead className="w-[100px]">ID</TableHead>
+                        <TableHead>Name</TableHead>
+                        <TableHead>E-mail</TableHead>
+                        <TableHead>Vat</TableHead>
+                        <TableHead>City</TableHead>
+                        <TableHead>Country</TableHead>
+                        <TableHead>Street</TableHead>
+                        <TableHead>Postal code</TableHead>
+                        <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {customers.map((customer) => (
+                        <TableRow key={customer.id}>
+                            <TableCell className="font-medium">{customer.id}</TableCell>
+                            <TableCell>{customer.name}</TableCell>
+                            <TableCell>{customer.email}</TableCell>
+                            <TableCell>{customer.vat_id}</TableCell>
+                            <TableCell>{customer.city}</TableCell>
+                            <TableCell>{customer.country}</TableCell>
+                            <TableCell>{customer.street}</TableCell>
+                            <TableCell>{customer.postal_code}</TableCell>
+                            <TableCell className="text-right">
+                                <Button onClick={() => handleDeleteCustomer(customer.id)}>Delete</Button>
+                                <Button onClick={() => handleEditCustomer(customer)}>Edit</Button>
+                                <Button onClick={() => handleCopyCustomer(customer)}>Copy</Button>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+                <TableFooter>
+                    <TableRow>
+                        <TableCell colSpan={3}>Total</TableCell>
+                        <TableCell className="text-right">{customers.length}</TableCell>
+                    </TableRow>
+                </TableFooter>
+            </Table>
 
-        <CustomerForm
-            draftCustomer={draftCustomer}
-            afterSubmit={fetchData}
-        />
+            <CustomerForm
+                draftCustomer={draftCustomer}
+                afterSubmit={fetchData}
+            />
         </div>
     )
 }
