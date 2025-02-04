@@ -5,9 +5,6 @@ export default function InvoicesLayout({
 }) {
     return (
         <div>
-            <div>
-                <h2>Auth section</h2>
-            </div>
             {children}
         </div>
     );

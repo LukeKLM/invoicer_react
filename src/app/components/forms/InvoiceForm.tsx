@@ -2,13 +2,14 @@ import { InputField } from "@/app/components/forms_inputs/inputField"
 import React, { useState, useEffect } from "react"
 import { createInvoice, updateInvoice } from "@/lib/services/invoicesApiService"
 import { Invoice } from "@/types/invoice"
+import { Button } from "@/components/ui/button"
 
 interface InvoiceFormProps {
     afterSubmit: () => Promise<void>
     draftInvoice: Invoice | null
 }
 
-export const InvoiceForm: React.FC<InvoiceFormProps> = ({ afterSubmit, draftInvoice }) => {
+const InvoiceForm: React.FC<InvoiceFormProps> = ({ afterSubmit, draftInvoice }) => {
     const [formData, setFormData] = useState({
         due_date: "",
         expose_date: "",
@@ -21,10 +22,10 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ afterSubmit, draftInvo
     })
 
     useEffect(() => {
-            if (draftInvoice) {
-                setFormData({...draftInvoice});
-            }
-        }, [draftInvoice])
+        if (draftInvoice) {
+            setFormData({ ...draftInvoice });
+        }
+    }, [draftInvoice])
 
     const formValueChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
@@ -34,24 +35,24 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ afterSubmit, draftInvo
 
     const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        const data = {...formData}
+        const data = { ...formData }
         if (draftInvoice?.id) {
             await updateInvoice(draftInvoice.id, data)
         } else {
             await createInvoice(data)
         }
-            await afterSubmit()
+        await afterSubmit()
     }
 
     return (
         <div>
-            <h1>Invoice Form</h1>
             <div className="max-w-screen-sm w-full mx-auto px-4">
                 <form onSubmit={handleSubmitForm}>
                     <div>
                         <InputField
                             id="due_date"
                             name="due_date"
+                            className="mt-3"
                             type="date"
                             required={true}
                             label="Due Date"
@@ -61,6 +62,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ afterSubmit, draftInvo
                         <InputField
                             id="expose_date"
                             name="expose_date"
+                            className="mt-3"
                             type="date"
                             required={true}
                             label="Expose Date"
@@ -70,6 +72,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ afterSubmit, draftInvo
                         <InputField
                             id="invoice_number"
                             name="invoice_number"
+                            className="mt-3"
                             type="text"
                             required={true}
                             label="Invoice Number"
@@ -79,6 +82,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ afterSubmit, draftInvo
                         <InputField
                             id="payment_type"
                             name="payment_type"
+                            className="mt-3"
                             type="text"
                             required={true}
                             label="Payment Type"
@@ -88,6 +92,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ afterSubmit, draftInvo
                         <InputField
                             id="state"
                             name="state"
+                            className="mt-3"
                             type="text"
                             required={true}
                             label="State"
@@ -97,6 +102,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ afterSubmit, draftInvo
                         <InputField
                             id="customer_id"
                             name="customer_id"
+                            className="mt-3"
                             type="number"
                             required={true}
                             label="Customer ID"
@@ -106,6 +112,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ afterSubmit, draftInvo
                         <InputField
                             id="supplier_id"
                             name="supplier_id"
+                            className="mt-3"
                             type="number"
                             required={true}
                             label="Supplier ID"
@@ -115,6 +122,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ afterSubmit, draftInvo
                         <InputField
                             id="variable_symbol"
                             name="variable_symbol"
+                            className="mt-3"
                             type="text"
                             required={true}
                             label="Variable Symbol"
@@ -122,16 +130,10 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ afterSubmit, draftInvo
                             onChange={formValueChanged}
                         />
                     </div>
-                    <div>
-                        <button
-                            type="submit"
-                            className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                        >
-                                {draftInvoice?.id ? "Update" : "Create"}
-                        </button>
-                    </div>
                 </form>
             </div>
         </div>
     )
 }
+
+export default InvoiceForm
