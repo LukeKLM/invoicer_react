@@ -2,7 +2,6 @@ import { InputField } from "@/app/components/forms_inputs/inputField"
 import React, { useState, useEffect } from "react"
 import { createInvoice, updateInvoice } from "@/lib/services/invoicesApiService"
 import { Invoice } from "@/types/invoice"
-import { Button } from "@/components/ui/button"
 
 interface InvoiceFormProps {
     afterSubmit: () => Promise<void>

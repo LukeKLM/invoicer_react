@@ -1,12 +1,12 @@
 import React from "react";
 import InvoicesTable from "@/app/components/tables/invoices-table";
-import InvoicesDialog from "@/app/components/dialogs/invoices-dialog";
+import InvoiceDialog from "@/app/components/dialogs/InvoiceDialog";
 
 const InvoicesDashboard: React.FC = () => {
 
     return (
         <div>
-            <InvoicesDialog />
+            <InvoiceDialog />
             <InvoicesTable />
         </div>
     );

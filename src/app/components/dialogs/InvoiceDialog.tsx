@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog"
 import InvoiceForm from "@/app/components/forms/InvoiceForm"
 
-const InvoicesDialog: React.FC = () => {
+const InvoiceDialog: React.FC = () => {
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -30,4 +30,4 @@ const InvoicesDialog: React.FC = () => {
     );
 }
 
-export default InvoicesDialog;
+export default InvoiceDialog;
