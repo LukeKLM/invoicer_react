@@ -1,19 +1,32 @@
-export type Invoice = {
-    id: number | null;
-    due_date: string;
-    expose_date: string;
-    invoice_number: string;
-    payment_type: string;
-    state: string;
-    customer_id: number;
-    supplier_id: number;
-    variable_symbol: string;
+export enum InvoicePaymentType {
+  CASH = "CASH",
+  BANK_TRANSFER = "BANK_TRANSFER",
 }
 
+export enum InvoiceStateType {
+  DRAFT = "DRAFT",
+  SENT = "SENT",
+  PAID = "PAID",
+  CANCELLED = "CANCELLED",
+}
+
+export interface Invoice {
+  id: number | null;
+  dueDate: string;
+  exposeDate: string;
+  invoiceNumber: string;
+  paymentType: InvoicePaymentType;
+  state: InvoiceStateType;
+  customerId: number;
+  supplierId: number;
+  variableSymbol: string;
+}
+
+
 export type InvoiceItem = {
-    id: number | null;
-    invoice_id: number;
-    price: string;
-    title: string;
-    quantity: number;
+  id: number | null;
+  invoiceId: number;
+  price: string;
+  title: string;
+  quantity: number;
 }

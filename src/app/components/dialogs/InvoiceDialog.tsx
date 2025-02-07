@@ -1,33 +1,34 @@
 'use client'
 import React from 'react';
-import { Button } from "@/components/ui/button"
 import {
-    Dialog,
-    DialogContent,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog"
 import InvoiceForm from "@/app/components/forms/InvoiceForm"
+import useInvoiceStore from '@/stores/useInvoiceStore';
 
 const InvoiceDialog: React.FC = () => {
-    return (
-        <Dialog>
-            <DialogTrigger asChild>
-                <Button variant="outline">Create Invoice</Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                    <DialogTitle>Create Invoice</DialogTitle>
-                </DialogHeader>
-                <InvoiceForm afterSubmit={async () => { }} draftInvoice={null} />
-                <DialogFooter>
-                    <Button type="submit">Save</Button>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog >
-    );
+  const { draftInvoice, invoiceDialog, updateInvoiceDialog } = useInvoiceStore();
+
+  const getTitle = () => {
+    return draftInvoice.id ? `Edit Invoice: ${draftInvoice.invoiceNumber} (${draftInvoice.id})` : 'Create Invoice';
+  }
+
+  return (
+    <Dialog
+      open={invoiceDialog}
+      onOpenChange={() => updateInvoiceDialog(false)}
+    >
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>{getTitle()}</DialogTitle>
+        </DialogHeader>
+        <InvoiceForm />
+      </DialogContent>
+    </Dialog >
+  );
 }
 
 export default InvoiceDialog;
