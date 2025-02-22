@@ -38,8 +38,7 @@ const InvoiceDialog: React.FC = () => {
         <DialogHeader>
           <DialogTitle>{getTitle()}</DialogTitle>
           <DialogDescription>
-            This action cannot be undone. This will permanently delete your account
-            and remove your data from our servers.
+            Invoice form dialog
           </DialogDescription>
         </DialogHeader>
         <InvoiceForm />

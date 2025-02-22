@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { MainMenu } from "./components/MainMenu";
+import { LayoutProvider } from "./contexts/LayoutContext";
 
 
 
@@ -17,10 +18,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <MainMenu />
-        <div className="container mx-auto max-w-6xl px-4 md:px-6">
-          {children}
-        </div>
+        <LayoutProvider>
+          <MainMenu />
+          <div className="container mx-auto max-w-6xl px-4 md:px-6">
+            {children}
+          </div>
+        </LayoutProvider>
       </body>
     </html>
   );
