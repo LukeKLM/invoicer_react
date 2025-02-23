@@ -1,3 +1,6 @@
+import { Customer } from "@/types/customer";
+import { Supplier } from "@/types/supplier";
+
 export enum InvoicePaymentType {
   CASH = "CASH",
   BANK_TRANSFER = "BANK_TRANSFER",
@@ -26,12 +29,12 @@ export interface Invoice {
   invoiceNumber: string;
   paymentType: InvoicePaymentType;
   state: InvoiceStateType;
-  customerId: number;
-  supplierId: number;
   variableSymbol: string;
   items: InvoiceItem[];
-  customer: { id: number, name: string } | null;
-  supplier: { id: number, name: string } | null;
+  customer: Customer | null;
+  supplier: Supplier | null;
   totalPrice: string;
+  customerId: number | undefined;
+  supplierId: number | undefined;
 }
 

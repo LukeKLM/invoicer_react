@@ -44,7 +44,7 @@ export const InvoiceTableActions: React.FC<TableActionsProps> = ({ invoice }) =>
 
   const handleCopyInvoice = (invoice: Invoice) => {
     const items = invoice.items.map((item) => ({ ...item, id: null, invoiceId: null }));
-    setDraft({ ...invoice, id: null, items });
+    setDraft({ ...invoice, id: null, items, supplierId: invoice?.supplier?.id as number, customerId: invoice?.customer?.id as number });
     openModal()
   };
 

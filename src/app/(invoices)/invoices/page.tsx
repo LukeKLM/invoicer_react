@@ -22,7 +22,7 @@ const InvoicesDashboard: React.FC = () => {
 
 
   return (
-    <div>
+    <div className="mt-6">
       <InvoiceDialog />
       <InvoicesTable />
     </div>

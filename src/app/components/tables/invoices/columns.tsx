@@ -3,6 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { Invoice } from "@/types/invoice"
 import { InvoiceTableActions } from "@/app/components/tables/invoices/invoiceTableActions"
+import InvoiceDetailLink from "@/app/components/tables/invoices/InvoiceDetailLink";
 
 export const columns: ColumnDef<Invoice>[] = [
   {
@@ -12,6 +13,11 @@ export const columns: ColumnDef<Invoice>[] = [
   {
     accessorKey: "invoiceNumber",
     header: "Invoice number",
+    cell: ({ row }) => {
+      return (
+        <InvoiceDetailLink invoice={row.original as Invoice} />
+      )
+    }
   },
   {
     accessorKey: "customer",

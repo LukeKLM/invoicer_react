@@ -1,13 +1,13 @@
 export type Supplier = {
-    id: number | null;
-    email: string;
-    name: string;
-    vat_id: string;
-    city: string;
-    country: string;
-    street: string;
-    postal_code: string;
-    bank_account: string;
-    bank_code: string;
-    iban: string;
+  id: number | null;
+  email: string;
+  name: string;
+  vatId: string;
+  city: string;
+  country: string;
+  street: string;
+  postalCode: string;
+  bankAccount: string;
+  bankCode: string;
+  iban: string;
 }

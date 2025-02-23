@@ -14,6 +14,16 @@ export const getInvoices = async () => {
   return invoices.json()
 }
 
+export const getInvoice = async (id: number) => {
+  const invoice = await fetchClient(
+    `${INVOICES_URL}/${id}`,
+    {
+      method: "GET",
+    }
+  )
+  return invoice.json()
+}
+
 export const createInvoice = async (data: Invoice) => {
   const invoice = await fetchClient(
     INVOICES_URL,

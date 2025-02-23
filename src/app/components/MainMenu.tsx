@@ -21,16 +21,8 @@ export function MainMenu() {
   }, []);
   const links = [
     {
-      title: "Home",
-      url: "/",
-    },
-    {
       title: "Invoices",
       url: "/invoices",
-    },
-    {
-      title: "Invoice Items",
-      url: "/invoice-items",
     },
     {
       title: "Customers",

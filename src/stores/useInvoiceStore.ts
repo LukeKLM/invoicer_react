@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { Invoice, InvoicePaymentType, InvoiceStateType, InvoiceItem } from '@/types/invoice'
-import { getInvoices, createInvoice, updateInvoice, deleteInvoice } from '@/lib/services/invoicesApiService'
+import { getInvoices, createInvoice, updateInvoice, deleteInvoice, getInvoice } from '@/lib/services/invoicesApiService'
 import { toCamelCase } from '@/lib/helpers'
 import { camelToSnake } from '@/lib/helpers'
 
@@ -9,7 +9,9 @@ interface InvocieAction {
   updateApiInvoice: (id: number, invoice: Invoice) => Promise<void>,
   createApiInvoice: (invoice: Invoice) => Promise<void>,
   fetchInvoices: () => Promise<void>,
+  fetchInvoice: (id: number) => Promise<void>,
   setDraft: (invoice: Invoice) => void,
+  setDetail: (invoice: Invoice) => void,
   resetDraft: () => void,
   appendDefaultItem: () => void,
   deleteDraftInvoiceItem: (index: number) => void,
@@ -21,6 +23,7 @@ interface InvocieAction {
 interface InvoiceState {
   invoices: Invoice[],
   draftInvoice: Invoice,
+  detailInvoice: Invoice,
   invoiceDialog: boolean,
 }
 
@@ -39,8 +42,32 @@ const getDefaultInvoice = (): Invoice => ({
   invoiceNumber: "",
   paymentType: InvoicePaymentType.BANK_TRANSFER,
   state: InvoiceStateType.DRAFT,
-  customerId: 1,
-  supplierId: 1,
+  totalPrice: "0",
+  customer: {
+    id: null,
+    email: "",
+    name: "",
+    vatId: "",
+    city: "",
+    postalCode: "",
+    country: "",
+    street: "",
+  },
+  supplier: {
+    id: null,
+    email: "",
+    name: "",
+    vatId: "",
+    city: "",
+    postalCode: "",
+    country: "",
+    street: "",
+    bankAccount: "",
+    bankCode: "",
+    iban: "",
+  },
+  supplierId: undefined,
+  customerId: undefined,
   variableSymbol: "",
   items: [
     getDefaultInvoiceItem()
@@ -50,6 +77,7 @@ const getDefaultInvoice = (): Invoice => ({
 const useInvoiceStore = create<InvoiceState & InvocieAction>((set) => ({
   invoiceDialog: false,
   invoices: [],
+  detailInvoice: getDefaultInvoice(),
   draftInvoice: getDefaultInvoice(),
   deleteApiInvoice: async (id) => {
     await deleteInvoice(id)
@@ -61,11 +89,15 @@ const useInvoiceStore = create<InvoiceState & InvocieAction>((set) => ({
   updateApiInvoice: async (id, invoice) => {
     await updateInvoice(id, camelToSnake(invoice))
   },
+  fetchInvoice: async (id) => {
+    set({ detailInvoice: toCamelCase(await getInvoice(id)) })
+  },
   fetchInvoices: async () => {
     set({ invoices: toCamelCase(await getInvoices()) })
   },
   resetDraft: () => set({ draftInvoice: getDefaultInvoice() }),
   setDraft: (invoice) => set({ draftInvoice: invoice }),
+  setDetail: (invoice) => set({ detailInvoice: invoice }),
   appendDefaultItem: () => set((state) => {
     if (!state.draftInvoice) return { draftInvoice: getDefaultInvoice() }
 
