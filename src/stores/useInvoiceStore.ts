@@ -48,6 +48,7 @@ const getDefaultInvoice = (): Invoice => ({
     email: "",
     name: "",
     vatId: "",
+    dicId: "",
     city: "",
     postalCode: "",
     country: "",
