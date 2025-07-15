@@ -2,6 +2,7 @@
 
 import { InputField } from "../forms_inputs/inputField"
 import useCustomerStore from "@/stores/useCustomerStore"
+import AresVatIdForm from "@/app/components/forms/AresVatIdForm"
 
 const CustomerForm: React.FC = () => {
 
@@ -15,6 +16,7 @@ const CustomerForm: React.FC = () => {
 
   return (
     <div>
+      <AresVatIdForm />
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         <InputField
           id="email"
