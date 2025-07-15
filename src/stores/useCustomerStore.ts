@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { Customer } from '@/types/customer'
+import { AresCompany } from '@/types/aresCompany'
 import { deleteCustomer, getCustomers, updateCustomer, createCustomer, getCustomer } from '@/lib/services/customersApiService'
 import { toCamelCase } from '@/lib/helpers'
 import { camelToSnake } from '@/lib/helpers'
@@ -15,6 +16,8 @@ interface CustomerAction {
   resetDraft: () => void,
   updateDraft: <K extends keyof Customer>(name: string, value: Customer[K]) => void,
   updateCustomerDialog: (value: boolean) => void,
+  setAresResponse: (response: AresCompany | null) => void,
+  clearAresResponse: () => void,
 }
 
 interface CustomerState {
@@ -22,6 +25,7 @@ interface CustomerState {
   draftCustomer: Customer,
   detailCustomer: Customer,
   customerDialog: boolean,
+  aresResponse: AresCompany | null,
 }
 
 const getDefaultCustomer = (): Customer => ({
@@ -41,6 +45,7 @@ const useCustomerStore = create<CustomerState & CustomerAction>((set) => ({
   customers: [],
   detailCustomer: getDefaultCustomer(),
   draftCustomer: getDefaultCustomer(),
+  aresResponse: null,
   deleteApiCustomer: async (id) => {
     await deleteCustomer(id)
   },
@@ -70,6 +75,8 @@ const useCustomerStore = create<CustomerState & CustomerAction>((set) => ({
     };
   }),
   updateCustomerDialog: (value) => set({ customerDialog: value }),
+  setAresResponse: (response) => set({ aresResponse: response }),
+  clearAresResponse: () => set({ aresResponse: null }),
 }))
 
 export default useCustomerStore;

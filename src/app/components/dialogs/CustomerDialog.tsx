@@ -11,9 +11,10 @@ import {
 import CustomerForm from "@/app/components/forms/CustomerForm"
 import useCustomerStore from '@/stores/useCustomerStore';
 import { Button } from '@/components/ui/button';
+import AresResponseDisplay from '@/app/components/AresResponseDisplay';
 
 const CustomerDialog: React.FC = () => {
-  const { draftCustomer, customerDialog, updateCustomerDialog, updateApiCustomer, createApiCustomer, fetchCustomers } = useCustomerStore();
+  const { draftCustomer, customerDialog, updateCustomerDialog, updateApiCustomer, createApiCustomer, fetchCustomers, aresResponse, clearAresResponse } = useCustomerStore();
 
   const getTitle = () => {
     return draftCustomer.id ? `Edit Customer: ${draftCustomer.name} (${draftCustomer.id})` : 'Create Customer';
@@ -25,13 +26,19 @@ const CustomerDialog: React.FC = () => {
       await createApiCustomer(draftCustomer)
     }
     await fetchCustomers()
+    clearAresResponse()
+    updateCustomerDialog(false)
+  }
+
+  const handleCloseDialog = () => {
+    clearAresResponse()
     updateCustomerDialog(false)
   }
 
   return (
     <Dialog
       open={customerDialog}
-      onOpenChange={() => updateCustomerDialog(false)}
+      onOpenChange={handleCloseDialog}
     >
       <DialogContent className="w-full max-w-4xl">
         <DialogHeader>
@@ -40,6 +47,7 @@ const CustomerDialog: React.FC = () => {
             Customer form dialog
           </DialogDescription>
         </DialogHeader>
+        {aresResponse && <AresResponseDisplay aresData={aresResponse} />}
         <CustomerForm />
         <DialogFooter>
           <Button className="mt-4" size="lg" onClick={() => handleSubmitForm()}>{draftCustomer.id ? 'Update' : 'Create'}</Button>

@@ -2,17 +2,23 @@ import React, { useState } from 'react'
 import { Button } from '@/components/ui/button';
 import { InputField } from "@/app/components/forms_inputs/inputField"
 import { fetchEconomicSubject } from "@/lib/services/aresApiService"
-import { AresCompany } from "@/types/aresCompany"
+import { mapAresDataToCustomer } from "@/lib/mappers/customerMappers"
+import useCustomerStore from "@/stores/useCustomerStore"
 
 const AresVatIdForm: React.FC = () => {
   const [companyId, setCompanyId] = useState<string>("")
-  const [companyData, setCompanyData] = useState<AresCompany | null>(null)
+  const { setDraft, setAresResponse } = useCustomerStore()
 
   async function handleFetchEconomicSubject() {
     const data = await fetchEconomicSubject(companyId)
     console.log(data)
-    setCompanyData(data)
-    console.log(companyData)
+
+    // Store ARES response for display
+    setAresResponse(data)
+    
+    // Map and populate customer form
+    const customerData = mapAresDataToCustomer(data)
+    setDraft(customerData)
   }
 
   return (

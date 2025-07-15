@@ -16,7 +16,7 @@ const CustomerForm: React.FC = () => {
 
   return (
     <div>
-      <AresVatIdForm />
+      {!draftCustomer.id && <AresVatIdForm />}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         <InputField
           id="email"
@@ -44,6 +44,7 @@ const CustomerForm: React.FC = () => {
           label="VAT ID"
           value={draftCustomer.vatId}
           onChange={formValueChanged}
+          readonly={!!draftCustomer.id}
         />
         <InputField
           id="dicId"
