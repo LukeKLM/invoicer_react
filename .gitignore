@@ -70,6 +70,7 @@ temp/
 
 # Claude Code specific
 CLAUDE.md
+/.claude
 
 # Local development
 .local
