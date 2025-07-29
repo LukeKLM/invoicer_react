@@ -17,7 +17,7 @@ const OAuthLoginPage: React.FC = () => {
     } else {
       navigate("/login", { replace: true });
     }
-  }, [navigate]);
+  }, [navigate, searchParams]);
 
   return null;
 }
