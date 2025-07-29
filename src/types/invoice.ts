@@ -27,6 +27,7 @@ export interface Invoice {
   dueDate: string;
   exposeDate: string;
   invoiceNumber: string;
+  orderNumber?: string;
   paymentType: InvoicePaymentType;
   state: InvoiceStateType;
   variableSymbol: string;

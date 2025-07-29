@@ -40,6 +40,7 @@ const getDefaultInvoice = (): Invoice => ({
   dueDate: "",
   exposeDate: "",
   invoiceNumber: "",
+  orderNumber: "",
   paymentType: InvoicePaymentType.BANK_TRANSFER,
   state: InvoiceStateType.DRAFT,
   totalPrice: "0",
